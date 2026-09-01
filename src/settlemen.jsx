@@ -1,40 +1,85 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import './settlemen.css';
 
-function Settlement(){
+function Settlement() {
 
-    const names = ["강하윤","이여설","이태율","홍길동"]//location.state?.people || [];
+    const names = ["강하윤", "이여설", "이태율", "홍길동"];
 
-    const peopleCount = names.length;
+const [money, setMoney] = useState(0);
+const [people, setPeople] = useState(0);
 
-    //const [user, setUser] = useState(0);
-    const [money, allmoney] = useState(0);
-    // function pay(){
-    //     let Person = money / user;
-    //     return NPerson;
-    // };   
-   return(
-         <div>
-            <a href="" style={{ color: 'black', marginBottom: '20px', display: 'flex', alignItems: 'start', fontSize: '23px' }}>← 정산 추가</a>
-            <div className="container"> 
-                <label>지출내용</label>
-                <input type="text" placeholder="지출내용을 입력하세요" style={{ marginBottom: '30px' }} />
-                <label>총 금액</label>
-                <input  type="text" value={money} onChange={(event) => {
-            allmoney(event.target.value)}} placeholder="총 금액을 입력하세요" style={{ marginBottom: '20px' }} />
-                <label>결제자</label>
-                <input type="text" placeholder="결제자를 입력하세요" style={{ marginBottom: '20px' }} />
-                
-                {Array.from({ length: peopleCount }, (_, index) => (
-                    <div key={index}>
-                    {names[index]}
-                    <input type="checkbox" />
-                </div>
-)               )}
-            </div>
-        </div>
-   );
-        
+const Nmoney = people > 0 ? money / people : 0;
+
+function pay(event) {
+    if (event.target.checked) {
+        setPeople(prev => prev + 1);
+    } else {
+        setPeople(prev => prev - 1);
+    }
 }
 
-export default Settlement;
+    return (
+
+        
+        <div>
+            <a
+                href=""
+                style={{
+                    color: 'black',
+                    marginBottom: '20px',
+                    display: 'flex',
+                    alignItems: 'start',
+                    fontSize: '23px'
+                }}
+            >
+                ← 정산 추가
+            </a>
+
+            <div className="container">
+
+                <label>지출내용</label>
+                <input
+                    type="text"
+                    placeholder="지출내용을 입력하세요"
+                    style={{ marginBottom: '30px' }}
+                />
+
+                <label>총 금액</label>
+                <input
+                    type="text"
+                    value={money}
+                    onChange={(event) => {
+                        setMoney(event.target.value);
+                    }}
+                    placeholder="총 금액을 입력하세요"
+                    style={{ marginBottom: '20px' }}
+                />
+
+                <label>결제자</label>
+                <input
+                    type="text"
+                    placeholder="결제자를 입력하세요"
+                    style={{ marginBottom: '20px' }}
+                />
+                <label style={{marginBottom : '5px'}}>참여자</label>
+
+                <div style={{ display: 'flex', gap: '20px',  marginLeft: '55px' }}>
+    {names.map((name, index) => (
+        <div key={index}>
+            <input
+                type="checkbox"
+                onClick = {pay}
+                style={{ width: 15, height: 15 }}
+            />
+            <span style={{ color: 'black' }}>{name}</span>
+        </div>
+    ))}
+</div>
+
+            <h3>1인당 금액 {Nmoney}원</h3>
+            </div>
+        </div>
+    );
+}
+
+export default Settlement;  

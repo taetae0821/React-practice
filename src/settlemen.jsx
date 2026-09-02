@@ -8,7 +8,7 @@ function Settlement() {
 const [money, setMoney] = useState(0);
 const [people, setPeople] = useState(0);
 
-const Nmoney = people > 0 ? money / people : 0;
+const Nmoney = people > 0 ? Math.round(money / people) : 0;
 
 function pay(event) {
     if (event.target.checked) {
@@ -75,11 +75,16 @@ function pay(event) {
         </div>
     ))}
 </div>
-
-            <h3>1인당 금액 {Nmoney}원</h3>
+            <h3 style={{ color : '#5B8DEF'}}>1인당 금액 {Nmoney}원</h3>
             </div>
+            <button style={{width : 230, height : 45, background : '#F3F3F3', color : 'black',borderRadius: '10px',boxShadow: 'none'}}>
+                취소
+            </button>
+            <button style={{width : 230, height : 45, background : '#5B8DEF',borderRadius: '10px', marginLeft : '10px',boxShadow: 'none'}}>
+                추가
+            </button>
         </div>
     );
 }
 
-export default Settlement;  
+export default Settlement; 

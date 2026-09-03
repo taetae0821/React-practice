@@ -69,8 +69,8 @@ function pay(event) {
             <span style={{ color: 'black' }}>{name}</span>
         </div>
     ))}
-</div>
-            <h3 style={{ color : '#5B8DEF'}}>1인당 금액 {Nmoney}원</h3>
+</div>  
+            <h3 style={{ color : '#5B8DEF', marginTop : '20px'}}>1인당 금액 {Nmoney}원</h3>
             </div>
             <button style={{width : 230, height : 45, background : '#F3F3F3', color : 'black',borderRadius: '10px',boxShadow: 'none'}}>
                 취소

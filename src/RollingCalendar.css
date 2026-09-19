@@ -1,0 +1,117 @@
+.rc-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    width: 100%;
+    max-width: 420px;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.rc-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.rc-label {
+    font-size: clamp(14px, 4vw, 18px);
+    font-weight: 600;
+    color: #222;
+    white-space: nowrap;
+}
+
+.rc-nav {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: clamp(16px, 4vw, 20px);
+    color: #5B8DEF;
+    line-height: 1;
+    padding: 4px 8px;
+}
+
+/* 7열 x 4행(28칸) 고정. minmax(0, 1fr)로 컨테이너가 좁아져도 넘치지 않음 */
+.rc-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
+    gap: clamp(2px, 1vw, 6px);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.rc-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    aspect-ratio: 1 / 1;
+    min-width: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+}
+
+.rc-date {
+    font-size: clamp(11px, 3vw, 15px);
+    color: #333;
+    line-height: 1;
+}
+
+.rc-cell--highlight {
+    background: #FFE9B3;
+}
+
+/* 오늘 날짜: 파란 테두리 링으로 명확하게 표시 (선택 표시와는 구분되게) */
+.rc-cell--today {
+    border: 2px solid #5B8DEF;
+    box-sizing: border-box;
+}
+
+.rc-cell--today .rc-date {
+    font-weight: 700;
+    color: #5B8DEF;
+}
+
+/* 오늘이면서 동시에 선택된 경우: 채워진 배경 + 흰 테두리로 링이 안쪽에 보이게 */
+.rc-cell--today.rc-cell--selected {
+    border-color: #fff;
+    box-shadow: 0 0 0 2px #5B8DEF;
+}
+
+.rc-cell--today.rc-cell--selected .rc-date {
+    color: #fff;
+}
+
+.rc-cell--selected {
+    background: #5B8DEF;
+}
+
+.rc-cell--selected .rc-date {
+    color: #fff;
+}
+
+.rc-dots {
+    display: flex;
+    gap: 2px;
+}
+
+.rc-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+@media (max-width: 360px) {
+    .rc-card {
+        padding: 10px;
+    }
+}

@@ -1,0 +1,6 @@
+.calendar-container {
+    width: 330px;
+}
+.fc .fc-daygrid-day-frame {
+    min-height: 35px;
+}

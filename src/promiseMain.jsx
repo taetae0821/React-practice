@@ -3,6 +3,8 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import koLocale from '@fullcalendar/core/locales/ko';
 
+import './promiseMain.css';
+
 function PromiseMain() {
 
     const events = [
@@ -13,13 +15,19 @@ function PromiseMain() {
         <div>
             <Link to="">←약속</Link>
 
-            <div style={{ width: '700px', margin: '0 auto' }}>
+            <div className="calendar-container">
                 <FullCalendar
-                plugins={[dayGridPlugin]}
-                initialView="dayGridMonth"
-                events={events}
-                locale={koLocale}
-            />
+                    plugins={[dayGridPlugin]}
+                    initialView="dayGridMonth"
+                    events={events}
+                    locale={koLocale}
+                    height="300px"
+                    headerToolbar={{
+                        left: 'prev',
+                        center: 'title',
+                        right: 'next'
+                    }}
+                />
             </div>
         </div>
     );

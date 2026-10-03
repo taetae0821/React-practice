@@ -34,3 +34,9 @@
 .pin-price {
     font-weight: bold;
 }
+.Calendar {
+    display: flex;
+    justify-content: right;
+    gap: 16px;
+    margin: 20px auto;
+}

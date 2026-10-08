@@ -13,6 +13,14 @@ const places = [
     { id: 3, name: '역삼 카페', price: 6500, lat: 37.5006, lng: 127.0364 },
 ];
 
+// 약속 참여자들 (나중에 서버 데이터로 교체)
+const members = [
+    { id: 1, name: '김태윤' },
+    { id: 2, name: '이민지' },
+    { id: 3, name: '박준호' },
+    { id: 4, name: '최수아' },
+];
+
 // 카카오맵 SDK를 한 번만 불러오기
 function loadKakaoMap() {
     if (window.kakao && window.kakao.maps) {
@@ -82,8 +90,19 @@ function PromiseMain() {
                     ))}
                 </ul>
             </div>
-            <div className='Calendar'>
-                <RollingCalendar></RollingCalendar>
+            <div className='bottom-layout'>
+                <div className='Members'>
+                    <p>참가자</p>
+                    {members.map((member) => (
+                        <div key={member.id} className='member-box'>
+                            <div className='member-avatar'>{member.name[0]}</div>
+                            <span className='member-name'>{member.name}</span>
+                        </div>
+                    ))}
+                </div>
+                <div className='Calendar'>
+                    <RollingCalendar></RollingCalendar>
+                </div>
             </div>
         </div>
     );

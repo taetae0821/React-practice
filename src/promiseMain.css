@@ -34,9 +34,47 @@
 .pin-price {
     font-weight: bold;
 }
-.Calendar {
+.bottom-layout {
     display: flex;
-    justify-content: right;
+    justify-content: center;
+    align-items: flex-start;
     gap: 16px;
     margin: 20px auto;
+}
+/* 캘린더 크기는 width만 바꾸면 됨 (높이는 날짜 칸이 정사각형이라 자동으로 맞춰짐) */
+.Calendar {
+    width: 450px;
+}
+.Calendar .rc-card {
+    max-width: none;
+}
+
+.Members {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.member-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 180px;
+    padding: 6px 12px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+}
+.member-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #fee500;
+    font-size: 13px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+.member-name {
+    font-size: 14px;
 }

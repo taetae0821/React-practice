@@ -15,10 +15,10 @@ const places = [
 
 // 약속 참여자들 (나중에 서버 데이터로 교체)
 const members = [
-    { id: 1, name: '김태윤' },
-    { id: 2, name: '이민지' },
-    { id: 3, name: '박준호' },
-    { id: 4, name: '최수아' },
+    { id: 1, name: '강하윤' },
+    { id: 2, name: '이여설' },
+    { id: 3, name: '이태율' },
+    { id: 4, name: '홍길동' },
 ];
 
 // 카카오맵 SDK를 한 번만 불러오기
@@ -104,6 +104,7 @@ function PromiseMain() {
                     <RollingCalendar></RollingCalendar>
                 </div>
             </div>
+            {/* <RollingCalendar></RollingCalendar> */}
         </div>
     );
 }

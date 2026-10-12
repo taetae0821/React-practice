@@ -21,6 +21,8 @@ const members = [
     { id: 4, name: '홍길동' },
 ];
 
+let fromisname = "제목";
+
 // 카카오맵 SDK를 한 번만 불러오기
 function loadKakaoMap() {
     if (window.kakao && window.kakao.maps) {
@@ -74,25 +76,35 @@ function PromiseMain() {
 
     return (
         <div>
-            <Link to="" style={{color : "balck"}}>←약속</Link>
+            <div className='top-bar'>
+                <Link to="" className='main'>←약속</Link>
+                <h2 className='title'>{fromisname}</h2>
+            </div>
             <div className="map-layout">
                 <div ref={mapRef} className="map-container"></div>
-                <ul className="pin-list">
-                    {places.map((place) => (
-                        <li
-                            key={place.id}
-                            className={place.id === selectedId ? 'pin-item selected' : 'pin-item'}
-                            onClick={() => handleSelect(place)}
-                        >
-                            <span className="pin-name">{place.name}</span>
-                            <span className="pin-price">{place.price.toLocaleString()}원</span>
-                        </li>
-                    ))}
-                </ul>
+                <div className="place-panel">
+                    <div className="place-header">
+                        <p className="place-title">장소 목록</p>
+                        <Link to="" className='place-Add'>장소 추가</Link>
+                    </div>
+                    <ul className="pin-list">
+                        {places.map((place) => (
+                            <li
+                                key={place.id}
+                                className={place.id === selectedId ? 'pin-item selected' : 'pin-item'}
+                                onClick={() => handleSelect(place)}
+                            >
+                                <span className="pin-name">{place.name}</span>
+                                <span className="pin-price">{place.price.toLocaleString()}원</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
             <div className='bottom-layout'>
                 <div className='Members'>
-                    <p>참가자</p>
+                    <p>참가자 {members.length}명</p>
+                    <button className='invite'>초대</button>
                     {members.map((member) => (
                         <div key={member.id} className='member-box'>
                             <div className='member-avatar'>{member.name[0]}</div>
@@ -104,7 +116,6 @@ function PromiseMain() {
                     <RollingCalendar></RollingCalendar>
                 </div>
             </div>
-            {/* <RollingCalendar></RollingCalendar> */}
         </div>
     );
 }

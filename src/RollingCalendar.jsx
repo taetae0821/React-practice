@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import KOREAN_HOLIDAYS from './koreanHolidays';
 import './RollingCalendar.css';
 
-// 항상 정확히 4주(28일)만 보여주는 롤링 캘린더.
-// 요일에 맞춰 정렬하지 않고, 그냥 1일부터 순서대로 28칸을 채운다.
-// 라이브러리 없이 순수 React로 구현 — 이유는 아래 설명 참고.
+// 한 달 단위 캘린더 (일요일부터 시작).
+// 1일 앞쪽과 말일 뒤쪽의 빈칸은 연한 '00'으로 채워서 칸 모양을 유지한다.
+// 라이브러리 없이 순수 React로 구현.
 
 function startOfMonth(date) {
     const d = new Date(date);
@@ -19,23 +20,23 @@ function formatYMD(d) {
     return `${y}-${m}-${day}`;
 }
 
-// events 예시 구조: [{ date: '2026-08-19', color: '#5B8DEF', highlight: true }]
-function RollingCalendar({
-    events = [],
-    stepWeeks = 1,      // '<' '>' 클릭 시 몇 주씩 이동할지
-    weeksToShow = 4,    // 항상 4주 고정 (요청사항)
-    onSelectDate,
-}) {
-    // 이번 달 1일부터 시작 (요일 정렬/앞쪽 빈칸 없이 그냥 1일부터)
-    const [rangeStart, setRangeStart] = useState(() => startOfMonth(new Date()));
+// events 예시 구조: [{ date: '2026-08-19', color: '#B5CDF5', highlight: true }]
+function RollingCalendar({ events = [], onSelectDate }) {
+    const [month, setMonth] = useState(() => startOfMonth(new Date()));
     const [selected, setSelected] = useState(null);
 
-    const totalDays = weeksToShow * 7;
-    const days = Array.from({ length: totalDays }, (_, i) => {
-        const d = new Date(rangeStart);
-        d.setDate(d.getDate() + i);
-        return d;
-    });
+    const year = month.getFullYear();
+    const monthIndex = month.getMonth();
+    const leading = month.getDay(); // 1일이 무슨 요일인지 (0 = 일요일)
+    const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+    const trailing = (7 - ((leading + daysInMonth) % 7)) % 7;
+
+    // null = 빈칸
+    const cells = [
+        ...Array(leading).fill(null),
+        ...Array.from({ length: daysInMonth }, (_, i) => new Date(year, monthIndex, i + 1)),
+        ...Array(trailing).fill(null),
+    ];
 
     const eventMap = {};
     events.forEach((e) => {
@@ -43,19 +44,8 @@ function RollingCalendar({
         eventMap[e.date].push(e);
     });
 
-    const first = days[0];
-    const last = days[days.length - 1];
-    const sameMonth = first.getMonth() === last.getMonth() && first.getFullYear() === last.getFullYear();
-    const headerLabel = sameMonth
-        ? `${first.getFullYear()}년 ${first.getMonth() + 1}월`
-        : `${first.getFullYear()}년 ${first.getMonth() + 1}월 ${first.getDate()}일 - ${last.getMonth() + 1}월 ${last.getDate()}일`;
-
-    function shift(weeks) {
-        setRangeStart((prev) => {
-            const d = new Date(prev);
-            d.setDate(d.getDate() + weeks * 7);
-            return d;
-        });
+    function shift(months) {
+        setMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() + months, 1));
     }
 
     const todayStr = formatYMD(new Date());
@@ -63,25 +53,37 @@ function RollingCalendar({
     return (
         <div className="rc-card">
             <div className="rc-header">
-                <button type="button" className="rc-nav" onClick={() => shift(-stepWeeks)} aria-label="이전">‹</button>
-                <span className="rc-label">{headerLabel}</span>
-                <button type="button" className="rc-nav" onClick={() => shift(stepWeeks)} aria-label="다음">›</button>
+                <button type="button" className="rc-nav" onClick={() => shift(-1)} aria-label="이전 달">&lt;</button>
+                <span className="rc-label">{year}년 {monthIndex + 1}월</span>
+                <button type="button" className="rc-nav" onClick={() => shift(1)} aria-label="다음 달">&gt;</button>
             </div>
 
             <div className="rc-grid">
-                {days.map((d) => {
+                {cells.map((d, i) => {
+                    if (!d) {
+                        return (
+                            <div key={`empty-${i}`} className="rc-cell rc-cell--empty">
+                                <span className="rc-date">00</span>
+                            </div>
+                        );
+                    }
+
                     const key = formatYMD(d);
                     const dayEvents = eventMap[key] || [];
                     const isHighlight = dayEvents.some((e) => e.highlight);
                     const isToday = key === todayStr;
                     const isSelected = key === selected;
+                    const holidayName = KOREAN_HOLIDAYS[key];
+                    const isRedDay = d.getDay() === 0 || !!holidayName; // 일요일 또는 공휴일
 
                     return (
                         <button
                             type="button"
                             key={key}
+                            title={holidayName}
                             className={
                                 'rc-cell' +
+                                (isRedDay ? ' rc-cell--red' : '') +
                                 (isHighlight ? ' rc-cell--highlight' : '') +
                                 (isToday ? ' rc-cell--today' : '') +
                                 (isSelected ? ' rc-cell--selected' : '')
@@ -92,13 +94,11 @@ function RollingCalendar({
                             }}
                         >
                             <span className="rc-date">{d.getDate()}</span>
-                            {dayEvents.length > 0 && (
-                                <span className="rc-dots">
-                                    {dayEvents.slice(0, 3).map((e, i) => (
-                                        <span key={i} className="rc-dot" style={{ background: e.color || '#5B8DEF' }} />
-                                    ))}
-                                </span>
-                            )}
+                            <span className="rc-dots">
+                                {dayEvents.filter((e) => e.color).slice(0, 3).map((e, j) => (
+                                    <span key={j} className="rc-dot" style={{ background: e.color }} />
+                                ))}
+                            </span>
                         </button>
                     );
                 })}

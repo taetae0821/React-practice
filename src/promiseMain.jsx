@@ -20,8 +20,13 @@ const members = [
     { id: 3, name: '이태율' },
     { id: 4, name: '홍길동' },
 ];
-
+// 약속 제목 (나중에 서버 데이터로 교체)
 let fromisname = "제목";
+
+// 캘린더 표시용 일정 (나중에 서버 데이터로 교체)
+// highlight: true → 노란 칸, color → 날짜 아래 점
+// 예: { date: '2026-10-21', highlight: true, color: '#B5CDF5' }
+const calendarEvents = [];
 
 // 카카오맵 SDK를 한 번만 불러오기
 function loadKakaoMap() {
@@ -80,6 +85,12 @@ function PromiseMain() {
                 <Link to="" className='main'>←약속</Link>
                 <h2 className='title'>{fromisname}</h2>
             </div>
+            {/* 탭 메뉴: to="" 에 각 페이지 경로 연결 */}
+            <nav className='tab-menu'>
+                <Link to="" className='tab active'>정보</Link>
+                <Link to="" className='tab'>정산</Link>
+                <Link to="" className='tab'>채팅</Link>
+            </nav>
             <div className="map-layout">
                 <div ref={mapRef} className="map-container"></div>
                 <div className="place-panel">
@@ -113,7 +124,7 @@ function PromiseMain() {
                     ))}
                 </div>
                 <div className='Calendar'>
-                    <RollingCalendar></RollingCalendar>
+                    <RollingCalendar events={calendarEvents} />
                 </div>
             </div>
         </div>
